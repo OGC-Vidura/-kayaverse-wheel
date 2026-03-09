@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Kaya's Multiverse Wheel - Phase 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00FF88 0%, #00FFFF 100%);
+            --primary-dark: #0a0e27;
+            --primary-light: #1a1a3e;
+            --accent-purple: #9D4EDD;
+            --accent-pink: #FF006E;
+            --accent-cyan: #00F5FF;
+            --success-green: #00FF88;
+            --border-color: rgba(0, 255, 136, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0ff;
+            --shadow-glow: 0 0 40px rgba(0, 255, 136, 0.3);
+            --font-display: 'Courier New', monospace;
+            --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: var(--primary-dark);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d0b4e 100%);
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 255, 136, 0.05) 25%, rgba(0, 255, 136, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 136, 0.05) 75%, rgba(0, 255, 136, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 255, 136, 0.05) 25%, rgba(0, 255, 136, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 136, 0.05) 75%, rgba(0, 255, 136, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+            filter: blur(40px);
+            animation: float 30s infinite ease-in-out;
+        }
+
+        .orb:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 10%; background: #00FF88; animation-duration: 25s; }
+        .orb:nth-child(2) { width: 200px; height: 200px; top: 60%; right: 15%; background: #00FFFF; animation-duration: 30s; animation-delay: -5s; }
+        .orb:nth-child(3) { width: 250px; height: 250px; bottom: 20%; left: 50%; background: #9D4EDD; animation-duration: 35s; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .title {
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 2em;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        canvas {
+            border: 3px solid var(--success-green);
+            border-radius: 20px;
+            box-shadow: var(--shadow-glow), 0 0 60px rgba(0, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(26, 26, 62, 0.8) 100%);
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-family: var(--font-display);
+            font-weight: bold;
+            background: var(--primary-gradient);
+            color: var(--primary-dark);
+            border: 2px solid var(--success-green);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        button:hover:not(:disabled) {
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.8), 0 0 80px rgba(0, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+
+
+        .result-panel {
+            position: fixed;
+            bottom: -400px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 255, 0.1) 100%);
+            border: 2px solid var(--success-green);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-glow);
+            z-index: 100;
+            transition: bottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .result-panel.show {
+            bottom: 20px;
+        }
+
+        .result-emoji {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        .winning-item {
+            font-size: 1.8em;
+            color: var(--success-green);
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .prize-amount {
+            font-size: 2.5em;
+            font-family: var(--font-display);
+            color: var(--accent-cyan);
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+        }
+
+        .personality-msg {
+            margin-top: 15px;
+            color: var(--accent-purple);
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .balance-info {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        .close-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.5em;
+            }
+            
+            canvas {
+                width: 100%;
+                max-width: 350px;
+                height: auto;
+            }
+            
+            .info-panel {
+                min-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+
+    <div class="container">
+        <div class="game-area">
+            <div class="title">🎡 KAYAVERSE WHEEL 🎡</div>
+            
+            <canvas id="wheelCanvas" width="500" height="500"></canvas>
+
+            <div class="controls">
+                <button id="spinBtn">🎡 SPIN WHEEL 🎡</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-panel" id="resultPanel">
+        <div class="result-emoji" id="resultEmoji"></div>
+        <div class="winning-item" id="winningItem"></div>
+        <div class="prize-amount" id="prizeAmount"></div>
+        <div class="balance-info">
+            <div>Today Won: $<span id="todayWon">0.00</span></div>
+        </div>
+        <div class="personality-msg" id="personalityMsg"></div>
+        <button class="close-btn" onclick="closeResult()">CLOSE</button>
+    </div>
+
+    <script>
+        const wheelConfig = {
+            items: [
+                { label: 'Golden Portal', amount: 1.00, color: '#FFD700', emoji: '✨' },
+                { label: 'Cosmic Brownie', amount: 0.50, color: '#FF6B9D', emoji: '🪐' },
+                { label: 'Multiverse Fragment', amount: 0.25, color: '#9D4EDD', emoji: '💎' },
+                { label: 'Dutcha Engineering', amount: 0.10, color: '#3A86FF', emoji: '⚙️' },
+                { label: 'Sonic Boost', amount: 0.05, color: '#06FFA5', emoji: '💨' },
+                { label: 'Portal Dust', amount: 0.02, color: '#00F5FF', emoji: '🌀' },
+                { label: 'Brownie Crumb', amount: 0.01, color: '#FFB703', emoji: '🍪' },
+                { label: 'Anomaly', amount: 0.00, color: '#FF006E', emoji: '❌' },
+            ],
+            personalities: [
+                "🌟 Kaya D. Dawg says: THAT'S WHAT'S UP! 🔥",
+                "👑 Kaya D. Dawg APPROVES! 👑",
+                "🌌 Multiverse blessing confirmed! 🌌",
+                "✨ Kaya vibes detected! ✨",
+                "🪐 Dimensional forces with you! 🪐",
+                "💫 Cosmic alignment achieved! 💫",
+                "⚡ Portal energy STRONG! ⚡",
+                "🌀 Multiverse destiny! 🌀",
+            ]
+        };
+
+        let isSpinning = false;
+        let rotation = 0;
+        let balance = 0;
+        let todayWon = 0;
+        let dailyBudgetUsed = 0;
+
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultPanel = document.getElementById('resultPanel');
+
+        function drawWheel(rotation = 0) {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 220;
+
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < 3; i++) {
+                const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius + 50 + i * 15);
+                grad.addColorStop(0, `rgba(0, 255, 136, ${0.3 - i * 0.1})`);
+                grad.addColorStop(1, `rgba(157, 78, 221, ${0.2 - i * 0.07})`);
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius + 50 + i * 15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.translate(centerX, centerY);
+            ctx.rotate((rotation * Math.PI) / 180);
+            ctx.translate(-centerX, -centerY);
+
+            const segmentAngle = 360 / wheelConfig.items.length;
+
+            wheelConfig.items.forEach((item, index) => {
+                const startAngle = (index * segmentAngle - 90) * (Math.PI / 180);
+                const endAngle = ((index + 1) * segmentAngle - 90) * (Math.PI / 180);
+
+                const segGrad = ctx.createLinearGradient(
+                    centerX + radius * Math.cos((startAngle + endAngle) / 2),
+                    centerY + radius * Math.sin((startAngle + endAngle) / 2),
+                    centerX,
+                    centerY
+                );
+                segGrad.addColorStop(0, item.color);
+                segGrad.addColorStop(1, adjustBrightness(item.color, -50));
+
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = segGrad;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate((startAngle + endAngle) / 2);
+                
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 32px Arial';
+                ctx.fillText(item.emoji, radius - 70, 10);
+                
+                ctx.font = 'bold 12px Arial';
+                ctx.fillStyle = '#ffff00';
+                ctx.fillText(`$${item.amount.toFixed(2)}`, radius - 70, 35);
+                
+                ctx.restore();
+            });
+
+            const centerGrad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 50);
+            centerGrad.addColorStop(0, '#00ffff');
+            centerGrad.addColorStop(0.5, '#00ff88');
+            centerGrad.addColorStop(1, '#9D4EDD');
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
+            ctx.fillStyle = centerGrad;
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 32px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🌌', centerX, centerY);
+
+            ctx.restore();
+        }
+
+        function adjustBrightness(color, percent) {
+            const num = parseInt(color.replace('#', ''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = Math.min(255, Math.max(0, (num >> 16) + amt));
+            const G = Math.min(255, Math.max(0, ((num >> 8) & 0xFF) + amt));
+            const B = Math.min(255, Math.max(0, (num & 0xFF) + amt));
+            return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+            spinBtn.disabled = true;
+
+            const randomExtra = Math.floor(Math.random() * 360);
+            const totalRotation = 2520 + randomExtra + rotation;
+            const duration = 6000;
+            const startTime = Date.now();
+            const startRotation = rotation;
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+                rotation = startRotation + (totalRotation - startRotation) * easeProgress;
+                drawWheel(rotation % 360);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+
+                    const normalizedRotation = (360 - (rotation % 360)) % 360;
+                    const segmentAngle = 360 / wheelConfig.items.length;
+                    const winIndex = Math.floor(normalizedRotation / segmentAngle);
+                    const winner = wheelConfig.items[winIndex];
+
+                    balance += winner.amount;
+                    todayWon += winner.amount;
+                    dailyBudgetUsed += winner.amount;
+
+                    showResult(winner);
+                }
+            }
+
+            animate();
+        }
+
+        function showResult(item) {
+            const personality = wheelConfig.personalities[Math.floor(Math.random() * wheelConfig.personalities.length)];
+            
+            document.getElementById('resultEmoji').textContent = item.emoji.split('')[0];
+            document.getElementById('winningItem').textContent = item.label;
+            document.getElementById('prizeAmount').textContent = `$${item.amount.toFixed(2)}`;
+            document.getElementById('todayWon').textContent = `${todayWon.toFixed(2)}`;
+            document.getElementById('totalBalance').textContent = `Balance: $${balance.toFixed(2)}`;
+            document.getElementById('personalityMsg').textContent = personality;
+
+            resultPanel.classList.add('show');
+        }
+
+        function closeResult() {
+            resultPanel.classList.remove('show');
+        }
+
+        spinBtn.addEventListener('click', spinWheel);
+        drawWheel();
+    </script>
+</body>
+</html>
