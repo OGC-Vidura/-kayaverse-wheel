@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Kaya's Multiverse Wheel - Phase 1</title>
+    <title>🎡 Kayaverse Wheel - Phase 1</title>
     <style>
         * {
             margin: 0;
@@ -147,8 +147,6 @@
             cursor: not-allowed;
         }
 
-
-
         .result-panel {
             position: fixed;
             bottom: -400px;
@@ -160,19 +158,32 @@
             padding: 30px;
             text-align: center;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             box-shadow: var(--shadow-glow);
             z-index: 100;
             transition: bottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .result-panel.show {
             bottom: 20px;
         }
 
+        .world-image {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid var(--success-green);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
         .result-emoji {
             font-size: 4em;
-            margin: 20px 0;
+            margin: 10px 0;
             animation: bounce 0.6s ease-in-out;
         }
 
@@ -180,7 +191,14 @@
             font-size: 1.8em;
             color: var(--success-green);
             font-weight: bold;
-            margin: 15px 0;
+            margin: 10px 0;
+        }
+
+        .world-name {
+            font-size: 1.2em;
+            color: var(--accent-cyan);
+            font-weight: bold;
+            margin: 10px 0;
         }
 
         .prize-amount {
@@ -225,10 +243,6 @@
                 max-width: 350px;
                 height: auto;
             }
-            
-            .info-panel {
-                min-width: 250px;
-            }
         }
     </style>
 </head>
@@ -252,6 +266,8 @@
 
     <div class="result-panel" id="resultPanel">
         <div class="result-emoji" id="resultEmoji"></div>
+        <img id="worldImage" class="world-image" alt="World">
+        <div class="world-name" id="worldName"></div>
         <div class="winning-item" id="winningItem"></div>
         <div class="prize-amount" id="prizeAmount"></div>
         <div class="balance-info">
@@ -262,16 +278,29 @@
     </div>
 
     <script>
+        const BASE_URL = 'https://OGC-Vidura.github.io/kayaverse-assets';
+
         const wheelConfig = {
             items: [
-                { label: 'Golden Portal', amount: 1.00, color: '#FFD700', emoji: '✨' },
-                { label: 'Cosmic Brownie', amount: 0.50, color: '#FF6B9D', emoji: '🪐' },
-                { label: 'Multiverse Fragment', amount: 0.25, color: '#9D4EDD', emoji: '💎' },
-                { label: 'Dutcha Engineering', amount: 0.10, color: '#3A86FF', emoji: '⚙️' },
-                { label: 'Sonic Boost', amount: 0.05, color: '#06FFA5', emoji: '💨' },
-                { label: 'Portal Dust', amount: 0.02, color: '#00F5FF', emoji: '🌀' },
-                { label: 'Brownie Crumb', amount: 0.01, color: '#FFB703', emoji: '🍪' },
-                { label: 'Anomaly', amount: 0.00, color: '#FF006E', emoji: '❌' },
+                { label: 'Golden Portal', amount: 1.00, emoji: '✨', world: 'God Kaya World', image: `${BASE_URL}/worlds/god-kaya-world.png` },
+                { label: 'Arena City', amount: 0.50, emoji: '⚔️', world: 'Arena City', image: `${BASE_URL}/worlds/arena-city.png` },
+                { label: 'Kaya Portal', amount: 0.50, emoji: '🌀', world: 'Kaya World Entrance', image: `${BASE_URL}/worlds/kaya-world-entrance.png` },
+                { label: 'Crazy Multiverses', amount: 0.50, emoji: '🌌', world: 'Crazy Multiverses', image: `${BASE_URL}/worlds/crazy-multiverses.webp` },
+                { label: 'Bouncing Festival', amount: 0.25, emoji: '🎉', world: 'Bouncing People', image: `${BASE_URL}/worlds/bouncing-people.png` },
+                { label: 'Jungle Sanctuary', amount: 0.25, emoji: '🌿', world: 'Jungle Fee Topia', image: `${BASE_URL}/worlds/jungle-fee-topia.png` },
+                { label: 'Forest Night', amount: 0.25, emoji: '🌲', world: 'Adventure Forest', image: `${BASE_URL}/worlds/adventure-forest-night.png` },
+                { label: 'Water Planet', amount: 0.25, emoji: '💧', world: 'Water Planet', image: `${BASE_URL}/premium-worlds/water-planet.png` },
+                { label: 'Happy City', amount: 0.10, emoji: '😊', world: 'Happy City', image: `${BASE_URL}/worlds/happy-city.png` },
+                { label: 'No Chill Bridge', amount: 0.10, emoji: '🌉', world: 'No Chill Bridge', image: `${BASE_URL}/worlds/no-chill-bridge.png` },
+                { label: 'Ruff City', amount: 0.10, emoji: '🏙️', world: 'Ruff City Life', image: `${BASE_URL}/worlds/ruff-city-life.png` },
+                { label: 'Festival Time', amount: 0.10, emoji: '🎊', world: 'Festival', image: `${BASE_URL}/worlds/festival.png` },
+                { label: 'Perfect People', amount: 0.10, emoji: '👥', world: 'Perfect People', image: `${BASE_URL}/worlds/perfect-people.png` },
+                { label: 'Binary Star', amount: 0.05, emoji: '⭐', world: 'Binary Star', image: `${BASE_URL}/worlds/binary-star.png` },
+                { label: 'Rogue Planet', amount: 0.05, emoji: '🪨', world: 'Rogue Planet', image: `${BASE_URL}/premium-worlds/rogue-planet.png` },
+                { label: 'City Sunset', amount: 0.05, emoji: '🌅', world: 'City Sunset', image: `${BASE_URL}/premium-worlds/city-sunset.png` },
+                { label: 'Boring World', amount: 0.00, emoji: '😴', world: 'Boring World', image: `${BASE_URL}/worlds/boring-world.png` },
+                { label: 'Insects World', amount: 0.00, emoji: '🐛', world: 'Insects World', image: `${BASE_URL}/worlds/insects-world.png` },
+                { label: 'Portal Closes', amount: 0.00, emoji: '❌', world: 'Portal Closes', image: `${BASE_URL}/premium-worlds/portal-closes.png` },
             ],
             personalities: [
                 "🌟 Kaya D. Dawg says: THAT'S WHAT'S UP! 🔥",
@@ -289,7 +318,6 @@
         let rotation = 0;
         let balance = 0;
         let todayWon = 0;
-        let dailyBudgetUsed = 0;
 
         const canvas = document.getElementById('wheelCanvas');
         const ctx = canvas.getContext('2d');
@@ -324,14 +352,17 @@
                 const startAngle = (index * segmentAngle - 90) * (Math.PI / 180);
                 const endAngle = ((index + 1) * segmentAngle - 90) * (Math.PI / 180);
 
+                const colors = ['#FFD700', '#FF6B9D', '#9D4EDD', '#3A86FF', '#06FFA5', '#00F5FF', '#FFB703', '#FF006E', '#00FF88', '#FF1493', '#32CD32', '#FF4500', '#1E90FF', '#FFD700', '#00CED1', '#FF69B4', '#808080', '#4B0082', '#FF0000'];
+                const color = colors[index % colors.length];
+
                 const segGrad = ctx.createLinearGradient(
                     centerX + radius * Math.cos((startAngle + endAngle) / 2),
                     centerY + radius * Math.sin((startAngle + endAngle) / 2),
                     centerX,
                     centerY
                 );
-                segGrad.addColorStop(0, item.color);
-                segGrad.addColorStop(1, adjustBrightness(item.color, -50));
+                segGrad.addColorStop(0, color);
+                segGrad.addColorStop(1, adjustBrightness(color, -50));
 
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
@@ -340,7 +371,7 @@
                 ctx.fillStyle = segGrad;
                 ctx.fill();
                 ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-                ctx.lineWidth = 4;
+                ctx.lineWidth = 3;
                 ctx.stroke();
 
                 ctx.save();
@@ -421,7 +452,6 @@
 
                     balance += winner.amount;
                     todayWon += winner.amount;
-                    dailyBudgetUsed += winner.amount;
 
                     showResult(winner);
                 }
@@ -433,11 +463,13 @@
         function showResult(item) {
             const personality = wheelConfig.personalities[Math.floor(Math.random() * wheelConfig.personalities.length)];
             
-            document.getElementById('resultEmoji').textContent = item.emoji.split('')[0];
+            document.getElementById('resultEmoji').textContent = item.emoji;
+            document.getElementById('worldImage').src = item.image;
+            document.getElementById('worldImage').onerror = function() { this.style.display = 'none'; };
+            document.getElementById('worldName').textContent = item.world;
             document.getElementById('winningItem').textContent = item.label;
             document.getElementById('prizeAmount').textContent = `$${item.amount.toFixed(2)}`;
             document.getElementById('todayWon').textContent = `${todayWon.toFixed(2)}`;
-            document.getElementById('totalBalance').textContent = `Balance: $${balance.toFixed(2)}`;
             document.getElementById('personalityMsg').textContent = personality;
 
             resultPanel.classList.add('show');
