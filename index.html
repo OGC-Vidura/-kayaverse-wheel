@@ -1,486 +1,599 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>🎡 Kayaverse Wheel - Phase 1</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>🎡 Kayaverse Wheel - Phase 1</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        :root {
-            --primary-gradient: linear-gradient(135deg, #00FF88 0%, #00FFFF 100%);
-            --primary-dark: #0a0e27;
-            --primary-light: #1a1a3e;
-            --accent-purple: #9D4EDD;
-            --accent-pink: #FF006E;
-            --accent-cyan: #00F5FF;
-            --success-green: #00FF88;
-            --border-color: rgba(0, 255, 136, 0.3);
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0ff;
-            --shadow-glow: 0 0 40px rgba(0, 255, 136, 0.3);
-            --font-display: 'Courier New', monospace;
-            --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
+    :root {
+      --primary-dark: #0a0e27;
+      --primary-light: #1a1a3e;
+      --accent-purple: #9D4EDD;
+      --accent-pink: #FF006E;
+      --accent-cyan: #00F5FF;
+      --success-green: #00FF88;
+      --gold: #FFD700;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0ff;
+      --font-display: 'Courier New', monospace;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            background: var(--primary-dark);
-            color: var(--text-primary);
-            font-family: var(--font-body);
-            overflow: hidden;
-        }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--primary-dark);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      overflow: hidden;
+    }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d0b4e 100%);
-        }
+    body {
+      display: flex; flex-direction: column;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d0b4e 100%);
+    }
 
-        /* Background Effects */
-        .bg-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(0deg, transparent 24%, rgba(0, 255, 136, 0.05) 25%, rgba(0, 255, 136, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 136, 0.05) 75%, rgba(0, 255, 136, 0.05) 76%, transparent 77%, transparent),
-                linear-gradient(90deg, transparent 24%, rgba(0, 255, 136, 0.05) 25%, rgba(0, 255, 136, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 136, 0.05) 75%, rgba(0, 255, 136, 0.05) 76%, transparent 77%, transparent);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
-        }
+    .bg-grid {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-image:
+        linear-gradient(0deg, transparent 24%, rgba(0,255,136,0.04) 25%, rgba(0,255,136,0.04) 26%, transparent 27%, transparent 74%, rgba(0,255,136,0.04) 75%, rgba(0,255,136,0.04) 76%, transparent 77%),
+        linear-gradient(90deg, transparent 24%, rgba(0,255,136,0.04) 25%, rgba(0,255,136,0.04) 26%, transparent 27%, transparent 74%, rgba(0,255,136,0.04) 75%, rgba(0,255,136,0.04) 76%, transparent 77%);
+      background-size: 50px 50px;
+      pointer-events: none; z-index: 0;
+    }
 
-        .orb {
-            position: fixed;
-            border-radius: 50%;
-            opacity: 0.1;
-            pointer-events: none;
-            filter: blur(40px);
-            animation: float 30s infinite ease-in-out;
-        }
+    .orb {
+      position: fixed; border-radius: 50%; opacity: 0.08; pointer-events: none;
+      filter: blur(50px); animation: float 30s infinite ease-in-out;
+    }
+    .orb:nth-child(1) { width: 350px; height: 350px; top: 5%; left: 5%; background: #00FF88; animation-duration: 25s; }
+    .orb:nth-child(2) { width: 250px; height: 250px; top: 55%; right: 10%; background: #00FFFF; animation-duration: 32s; animation-delay: -5s; }
+    .orb:nth-child(3) { width: 300px; height: 300px; bottom: 10%; left: 45%; background: #9D4EDD; animation-duration: 38s; animation-delay: -12s; }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(25px, -20px); }
+      66% { transform: translate(-15px, 15px); }
+    }
 
-        .orb:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 10%; background: #00FF88; animation-duration: 25s; }
-        .orb:nth-child(2) { width: 200px; height: 200px; top: 60%; right: 15%; background: #00FFFF; animation-duration: 30s; animation-delay: -5s; }
-        .orb:nth-child(3) { width: 250px; height: 250px; bottom: 20%; left: 50%; background: #9D4EDD; animation-duration: 35s; animation-delay: -10s; }
+    .container {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100vh; padding: 16px;
+    }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, -30px); }
-        }
+    .game-area {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px; width: 100%;
+    }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            padding: 20px;
-        }
+    .title {
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: clamp(1.2em, 3vw, 1.9em);
+      font-weight: bold;
+      background: linear-gradient(135deg, #00FF88, #00FFFF);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 3px;
+    }
 
-        .game-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
+    .stats-bar {
+      display: flex; gap: 20px; align-items: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 50px; padding: 8px 20px;
+      font-size: 0.82em; font-family: var(--font-display);
+    }
+    .stat-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .stat-label { color: var(--text-secondary); font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; }
+    .stat-value { color: var(--success-green); font-weight: bold; font-size: 1em; }
+    .stat-divider { width: 1px; height: 30px; background: rgba(0,255,136,0.2); }
 
-        .title {
-            text-align: center;
-            font-family: var(--font-display);
-            font-size: 2em;
-            font-weight: bold;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-        }
+    .wheel-wrapper {
+      position: relative;
+      display: inline-block;
+    }
 
-        canvas {
-            border: 3px solid var(--success-green);
-            border-radius: 20px;
-            box-shadow: var(--shadow-glow), 0 0 60px rgba(0, 255, 255, 0.2);
-            background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(26, 26, 62, 0.8) 100%);
-        }
+    .wheel-pointer {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 28px solid var(--gold);
+      filter: drop-shadow(0 0 8px rgba(255,215,0,0.9)) drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+      z-index: 10;
+    }
+    .wheel-pointer::after {
+      content: '';
+      position: absolute;
+      top: -32px; left: -10px;
+      width: 20px; height: 8px;
+      background: var(--gold);
+      border-radius: 4px;
+    }
 
-        .controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
+    canvas {
+      display: block;
+      border: 3px solid var(--success-green);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(0,255,136,0.35), 0 0 80px rgba(0,255,255,0.15), inset 0 0 30px rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, rgba(10,14,39,0.9) 0%, rgba(26,26,62,0.9) 100%);
+    }
 
-        button {
-            padding: 15px 40px;
-            font-size: 1.1em;
-            font-family: var(--font-display);
-            font-weight: bold;
-            background: var(--primary-gradient);
-            color: var(--primary-dark);
-            border: 2px solid var(--success-green);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+    .controls { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 
-        button:hover:not(:disabled) {
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.8), 0 0 80px rgba(0, 255, 255, 0.4);
-            transform: scale(1.05);
-        }
+    .spin-btn {
+      position: relative; overflow: hidden;
+      padding: 14px 44px;
+      font-size: 1.05em; font-family: var(--font-display); font-weight: bold;
+      background: linear-gradient(135deg, #00FF88, #00FFFF);
+      color: #0a0e27;
+      border: none; border-radius: 12px; cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 25px rgba(0,255,136,0.5), 0 4px 15px rgba(0,0,0,0.3);
+      text-transform: uppercase; letter-spacing: 2px;
+      min-width: 220px;
+    }
+    .spin-btn::before {
+      content: '';
+      position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transition: left 0.4s ease;
+    }
+    .spin-btn:hover:not(:disabled)::before { left: 100%; }
+    .spin-btn:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 0 50px rgba(0,255,136,0.8), 0 0 90px rgba(0,255,255,0.3), 0 6px 20px rgba(0,0,0,0.4);
+    }
+    .spin-btn:active:not(:disabled) { transform: scale(0.97); }
+    .spin-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+    .spin-dots { display: none; }
+    .spin-btn.spinning .spin-text { display: none; }
+    .spin-btn.spinning .spin-dots { display: inline; }
 
-        .result-panel {
-            position: fixed;
-            bottom: -400px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 255, 0.1) 100%);
-            border: 2px solid var(--success-green);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: var(--shadow-glow);
-            z-index: 100;
-            transition: bottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .overlay.show { opacity: 1; pointer-events: all; }
 
-        .result-panel.show {
-            bottom: 20px;
-        }
+    .result-card {
+      background: linear-gradient(145deg, #0f1535, #1e0840);
+      border: 2px solid var(--success-green);
+      border-radius: 24px;
+      padding: 28px 30px 24px;
+      text-align: center;
+      width: 92%; max-width: 460px;
+      box-shadow: 0 0 60px rgba(0,255,136,0.3), 0 0 120px rgba(157,78,221,0.2);
+      transform: scale(0.85);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height: 90vh; overflow-y: auto;
+    }
+    .overlay.show .result-card { transform: scale(1); }
 
-        .world-image {
-            width: 100%;
-            max-width: 300px;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px solid var(--success-green);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-        }
+    .tier-badge {
+      display: inline-block;
+      padding: 4px 16px; border-radius: 50px;
+      font-size: 0.7em; font-family: var(--font-display);
+      font-weight: bold; letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .tier-jackpot  { background: linear-gradient(135deg,#FFD700,#FFA500); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.6); }
+    .tier-rare     { background: linear-gradient(135deg,#9D4EDD,#FF006E); color: #fff; box-shadow: 0 0 15px rgba(157,78,221,0.5); }
+    .tier-uncommon { background: linear-gradient(135deg,#3A86FF,#00F5FF); color: #fff; box-shadow: 0 0 12px rgba(0,245,255,0.4); }
+    .tier-common   { background: linear-gradient(135deg,#00FF88,#00FFFF); color: #000; box-shadow: 0 0 12px rgba(0,255,136,0.4); }
+    .tier-consolation { background: linear-gradient(135deg,#555,#333); color: #aaa; }
 
-        .result-emoji {
-            font-size: 4em;
-            margin: 10px 0;
-            animation: bounce 0.6s ease-in-out;
-        }
+    .result-emoji { font-size: 3.6em; margin: 6px 0; animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
-        .winning-item {
-            font-size: 1.8em;
-            color: var(--success-green);
-            font-weight: bold;
-            margin: 10px 0;
-        }
+    .world-image {
+      width: 100%; max-width: 280px; height: 170px;
+      object-fit: cover; border-radius: 14px; margin: 14px auto;
+      display: block;
+      border: 2px solid rgba(0,255,136,0.5);
+      box-shadow: 0 0 25px rgba(0,255,136,0.3);
+    }
 
-        .world-name {
-            font-size: 1.2em;
-            color: var(--accent-cyan);
-            font-weight: bold;
-            margin: 10px 0;
-        }
+    .winning-item { font-size: 1.65em; color: var(--success-green); font-weight: bold; margin: 6px 0; }
+    .world-name   { font-size: 1em; color: var(--accent-cyan); margin: 4px 0 10px; opacity: 0.85; }
 
-        .prize-amount {
-            font-size: 2.5em;
-            font-family: var(--font-display);
-            color: var(--accent-cyan);
-            font-weight: bold;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
-        }
+    .prize-amount {
+      font-size: 2.8em; font-family: var(--font-display);
+      font-weight: bold; margin: 8px 0;
+      background: linear-gradient(135deg, #FFD700, #00FFFF);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 12px rgba(0,255,255,0.5));
+    }
 
-        .personality-msg {
-            margin-top: 15px;
-            color: var(--accent-purple);
-            font-style: italic;
-            font-size: 0.95em;
-        }
+    .session-stats {
+      display: flex; gap: 16px; justify-content: center;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px; padding: 10px 16px; margin: 10px 0;
+    }
+    .session-stat { text-align: center; }
+    .session-stat .val { font-size: 1.1em; font-weight: bold; color: var(--gold); font-family: var(--font-display); }
+    .session-stat .lbl { font-size: 0.7em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
-        .balance-info {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: var(--text-secondary);
-        }
+    .personality-msg { margin: 10px 0 14px; color: var(--accent-purple); font-style: italic; font-size: 0.9em; line-height: 1.4; }
 
-        .close-btn {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 0.9em;
-        }
+    .result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
 
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
+    .btn-spin-again {
+      padding: 11px 28px; font-size: 0.95em; font-family: var(--font-display);
+      font-weight: bold; letter-spacing: 1px; text-transform: uppercase;
+      background: linear-gradient(135deg, #00FF88, #00FFFF);
+      color: #0a0e27; border: none; border-radius: 10px; cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,255,136,0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-spin-again:hover { transform: scale(1.04); box-shadow: 0 0 35px rgba(0,255,136,0.7); }
 
-        @media (max-width: 768px) {
-            .title {
-                font-size: 1.5em;
-            }
-            
-            canvas {
-                width: 100%;
-                max-width: 350px;
-                height: auto;
-            }
-        }
-    </style>
+    .btn-close {
+      padding: 11px 24px; font-size: 0.9em; font-family: var(--font-display);
+      font-weight: bold; letter-spacing: 1px; text-transform: uppercase;
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid rgba(160,160,255,0.3); border-radius: 10px; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-close:hover { border-color: rgba(160,160,255,0.7); color: #fff; }
+
+    .confetti-container {
+      position: fixed; inset: 0; pointer-events: none; z-index: 300;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute; top: -20px;
+      width: 10px; height: 14px; border-radius: 2px;
+      animation: confetti-fall linear forwards;
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    @media (max-width: 520px) {
+      .title { letter-spacing: 2px; }
+      canvas { width: min(340px, 92vw) !important; height: min(340px, 92vw) !important; }
+      .stats-bar { gap: 12px; padding: 6px 14px; font-size: 0.78em; }
+      .spin-btn { padding: 12px 32px; font-size: 0.95em; min-width: 190px; }
+    }
+    @media (max-height: 680px) {
+      .game-area { gap: 10px; }
+      .title { font-size: 1.1em; }
+    }
+  </style>
 </head>
 <body>
-    <div class="bg-grid"></div>
-    <div class="orb"></div>
-    <div class="orb"></div>
-    <div class="orb"></div>
+  <div class="bg-grid"></div>
+  <div class="orb"></div>
+  <div class="orb"></div>
+  <div class="orb"></div>
+  <div class="confetti-container" id="confettiContainer"></div>
 
-    <div class="container">
-        <div class="game-area">
-            <div class="title">🎡 KAYAVERSE WHEEL 🎡</div>
-            
-            <canvas id="wheelCanvas" width="500" height="500"></canvas>
+  <div class="container">
+    <div class="game-area">
+      <div class="title">🎡 KAYAVERSE WHEEL 🎡</div>
 
-            <div class="controls">
-                <button id="spinBtn">🎡 SPIN WHEEL 🎡</button>
-            </div>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">Today Won</span>
+          <span class="stat-value" id="statTodayWon">$0.00</span>
         </div>
-    </div>
-
-    <div class="result-panel" id="resultPanel">
-        <div class="result-emoji" id="resultEmoji"></div>
-        <img id="worldImage" class="world-image" alt="World">
-        <div class="world-name" id="worldName"></div>
-        <div class="winning-item" id="winningItem"></div>
-        <div class="prize-amount" id="prizeAmount"></div>
-        <div class="balance-info">
-            <div>Today Won: $<span id="todayWon">0.00</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Spins</span>
+          <span class="stat-value" id="statSpins">0</span>
         </div>
-        <div class="personality-msg" id="personalityMsg"></div>
-        <button class="close-btn" onclick="closeResult()">CLOSE</button>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Best</span>
+          <span class="stat-value" id="statBest">$0.00</span>
+        </div>
+      </div>
+
+      <div class="wheel-wrapper">
+        <div class="wheel-pointer"></div>
+        <canvas id="wheelCanvas" width="460" height="460"></canvas>
+      </div>
+
+      <div class="controls">
+        <button class="spin-btn" id="spinBtn">
+          <span class="spin-text">🎡 SPIN WHEEL 🎡</span>
+          <span class="spin-dots">SPINNING ...</span>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const BASE_URL = 'https://OGC-Vidura.github.io/kayaverse-assets';
+  <div class="overlay" id="resultOverlay">
+    <div class="result-card" id="resultCard">
+      <div class="tier-badge" id="tierBadge">COMMON</div>
+      <div class="result-emoji" id="resultEmoji"></div>
+      <img id="worldImage" class="world-image" alt="World">
+      <div class="winning-item" id="winningItem"></div>
+      <div class="world-name" id="worldName"></div>
+      <div class="prize-amount" id="prizeAmount"></div>
+      <div class="session-stats">
+        <div class="session-stat"><div class="val" id="cardTodayWon">$0.00</div><div class="lbl">Today Won</div></div>
+        <div class="session-stat"><div class="val" id="cardSpins">0</div><div class="lbl">Spins</div></div>
+        <div class="session-stat"><div class="val" id="cardBest">$0.00</div><div class="lbl">Best Spin</div></div>
+      </div>
+      <div class="personality-msg" id="personalityMsg"></div>
+      <div class="result-actions">
+        <button class="btn-spin-again" id="spinAgainBtn">🎡 SPIN AGAIN</button>
+        <button class="btn-close" onclick="closeResult()">CLOSE</button>
+      </div>
+    </div>
+  </div>
 
-        const wheelConfig = {
-            items: [
-                { label: 'Golden Portal', amount: 1.00, emoji: '✨', world: 'God Kaya World', image: `${BASE_URL}/worlds/god-kaya-world.png` },
-                { label: 'Arena City', amount: 0.50, emoji: '⚔️', world: 'Arena City', image: `${BASE_URL}/worlds/arena-city.png` },
-                { label: 'Kaya Portal', amount: 0.50, emoji: '🌀', world: 'Kaya World Entrance', image: `${BASE_URL}/worlds/kaya-world-entrance.png` },
-                { label: 'Crazy Multiverses', amount: 0.50, emoji: '🌌', world: 'Crazy Multiverses', image: `${BASE_URL}/worlds/crazy-multiverses.webp` },
-                { label: 'Bouncing Festival', amount: 0.25, emoji: '🎉', world: 'Bouncing People', image: `${BASE_URL}/worlds/bouncing-people.png` },
-                { label: 'Jungle Sanctuary', amount: 0.25, emoji: '🌿', world: 'Jungle Fee Topia', image: `${BASE_URL}/worlds/jungle-fee-topia.png` },
-                { label: 'Forest Night', amount: 0.25, emoji: '🌲', world: 'Adventure Forest', image: `${BASE_URL}/worlds/adventure-forest-night.png` },
-                { label: 'Water Planet', amount: 0.25, emoji: '💧', world: 'Water Planet', image: `${BASE_URL}/premium-worlds/water-planet.png` },
-                { label: 'Happy City', amount: 0.10, emoji: '😊', world: 'Happy City', image: `${BASE_URL}/worlds/happy-city.png` },
-                { label: 'No Chill Bridge', amount: 0.10, emoji: '🌉', world: 'No Chill Bridge', image: `${BASE_URL}/worlds/no-chill-bridge.png` },
-                { label: 'Ruff City', amount: 0.10, emoji: '🏙️', world: 'Ruff City Life', image: `${BASE_URL}/worlds/ruff-city-life.png` },
-                { label: 'Festival Time', amount: 0.10, emoji: '🎊', world: 'Festival', image: `${BASE_URL}/worlds/festival.png` },
-                { label: 'Perfect People', amount: 0.10, emoji: '👥', world: 'Perfect People', image: `${BASE_URL}/worlds/perfect-people.png` },
-                { label: 'Binary Star', amount: 0.05, emoji: '⭐', world: 'Binary Star', image: `${BASE_URL}/worlds/binary-star.png` },
-                { label: 'Rogue Planet', amount: 0.05, emoji: '🪨', world: 'Rogue Planet', image: `${BASE_URL}/premium-worlds/rogue-planet.png` },
-                { label: 'City Sunset', amount: 0.05, emoji: '🌅', world: 'City Sunset', image: `${BASE_URL}/premium-worlds/city-sunset.png` },
-                { label: 'Boring World', amount: 0.00, emoji: '😴', world: 'Boring World', image: `${BASE_URL}/worlds/boring-world.png` },
-                { label: 'Insects World', amount: 0.00, emoji: '🐛', world: 'Insects World', image: `${BASE_URL}/worlds/insects-world.png` },
-                { label: 'Portal Closes', amount: 0.00, emoji: '❌', world: 'Portal Closes', image: `${BASE_URL}/premium-worlds/portal-closes.png` },
-            ],
-            personalities: [
-                "🌟 Kaya D. Dawg says: THAT'S WHAT'S UP! 🔥",
-                "👑 Kaya D. Dawg APPROVES! 👑",
-                "🌌 Multiverse blessing confirmed! 🌌",
-                "✨ Kaya vibes detected! ✨",
-                "🪐 Dimensional forces with you! 🪐",
-                "💫 Cosmic alignment achieved! 💫",
-                "⚡ Portal energy STRONG! ⚡",
-                "🌀 Multiverse destiny! 🌀",
-            ]
-        };
+  <script>
+    const BASE_URL = 'https://OGC-Vidura.github.io/kayaverse-assets';
+    const wheelConfig = {
+      items: [
+        { label: 'Golden Portal',     amount: 1.00, emoji: '✨', world: 'God Kaya World',       image: BASE_URL + '/worlds/god-kaya-world.png' },
+        { label: 'Arena City',        amount: 0.50, emoji: '⚔️', world: 'Arena City',           image: BASE_URL + '/worlds/arena-city.png' },
+        { label: 'Kaya Portal',       amount: 0.50, emoji: '🌀', world: 'Kaya World Entrance',  image: BASE_URL + '/worlds/kaya-world-entrance.png' },
+        { label: 'Crazy Multiverses', amount: 0.50, emoji: '🌌', world: 'Crazy Multiverses',    image: BASE_URL + '/worlds/crazy-multiverses.webp' },
+        { label: 'Bouncing Festival', amount: 0.25, emoji: '🎉', world: 'Bouncing People',      image: BASE_URL + '/worlds/bouncing-people.png' },
+        { label: 'Jungle Sanctuary',  amount: 0.25, emoji: '🌿', world: 'Jungle Fee Topia',     image: BASE_URL + '/worlds/jungle-fee-topia.png' },
+        { label: 'Forest Night',      amount: 0.25, emoji: '🌲', world: 'Adventure Forest',     image: BASE_URL + '/worlds/adventure-forest-night.png' },
+        { label: 'Water Planet',      amount: 0.25, emoji: '💧', world: 'Water Planet',          image: BASE_URL + '/premium-worlds/water-planet.png' },
+        { label: 'Happy City',        amount: 0.10, emoji: '😊', world: 'Happy City',           image: BASE_URL + '/worlds/happy-city.png' },
+        { label: 'No Chill Bridge',   amount: 0.10, emoji: '🌉', world: 'No Chill Bridge',      image: BASE_URL + '/worlds/no-chill-bridge.png' },
+        { label: 'Ruff City',         amount: 0.10, emoji: '🏙️', world: 'Ruff City Life',       image: BASE_URL + '/worlds/ruff-city-life.png' },
+        { label: 'Festival Time',     amount: 0.10, emoji: '🎊', world: 'Festival',             image: BASE_URL + '/worlds/festival.png' },
+        { label: 'Perfect People',    amount: 0.10, emoji: '👥', world: 'Perfect People',       image: BASE_URL + '/worlds/perfect-people.png' },
+        { label: 'Binary Star',       amount: 0.05, emoji: '⭐', world: 'Binary Star',          image: BASE_URL + '/worlds/binary-star.png' },
+        { label: 'Rogue Planet',      amount: 0.05, emoji: '🪨', world: 'Rogue Planet',         image: BASE_URL + '/premium-worlds/rogue-planet.png' },
+        { label: 'City Sunset',       amount: 0.05, emoji: '🌅', world: 'City Sunset',          image: BASE_URL + '/premium-worlds/city-sunset.png' },
+        { label: 'Boring World',      amount: 0.00, emoji: '😴', world: 'Boring World',         image: BASE_URL + '/worlds/boring-world.png' },
+        { label: 'Insects World',     amount: 0.00, emoji: '🐛', world: 'Insects World',        image: BASE_URL + '/worlds/insects-world.png' },
+        { label: 'Portal Closes',     amount: 0.00, emoji: '❌', world: 'Portal Closes',        image: BASE_URL + '/premium-worlds/portal-closes.png' },
+      ],
+      personalities: [
+        "🌟 Kaya D. Dawg says: THAT'S WHAT'S UP! 🔥",
+        "👑 Kaya D. Dawg APPROVES! 👑",
+        "🌌 Multiverse blessing confirmed! 🌌",
+        "✨ Kaya vibes detected! ✨",
+        "🪐 Dimensional forces are with you! 🪐",
+        "💫 Cosmic alignment achieved! 💫",
+        "⚡ Portal energy STRONG! ⚡",
+        "🌀 Multiverse destiny unlocked! 🌀",
+      ]
+    };
 
-        let isSpinning = false;
-        let rotation = 0;
-        let balance = 0;
-        let todayWon = 0;
+    const TIER_COLORS = {
+      1.00: ['#FFD700', '#FFA500', '#FF8C00'],
+      0.50: ['#9D4EDD', '#FF006E', '#C0392B'],
+      0.25: ['#3A86FF', '#0056d6', '#004aad'],
+      0.10: ['#06FFA5', '#00CC84', '#009963'],
+      0.05: ['#00CED1', '#009aad', '#006d7a'],
+      0.00: ['#555', '#3a3a3a', '#2a2a2a'],
+    };
 
-        const canvas = document.getElementById('wheelCanvas');
-        const ctx = canvas.getContext('2d');
-        const spinBtn = document.getElementById('spinBtn');
-        const resultPanel = document.getElementById('resultPanel');
+    function getTierInfo(amount) {
+      if (amount >= 1.00) return { label: '✨ JACKPOT',    cls: 'tier-jackpot' };
+      if (amount >= 0.50) return { label: '💎 RARE',       cls: 'tier-rare' };
+      if (amount >= 0.25) return { label: '🔵 UNCOMMON',   cls: 'tier-uncommon' };
+      if (amount >= 0.05) return { label: '🟢 COMMON',     cls: 'tier-common' };
+      return                     { label: '😴 TRY AGAIN',  cls: 'tier-consolation' };
+    }
 
-        function drawWheel(rotation = 0) {
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = 220;
+    let isSpinning = false;
+    let rotation   = 0;
+    let todayWon   = 0;
+    let spinCount  = 0;
+    let bestSpin   = 0;
 
-            ctx.save();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const canvas  = document.getElementById('wheelCanvas');
+    const ctx     = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
+    const overlay = document.getElementById('resultOverlay');
 
-            for (let i = 0; i < 3; i++) {
-                const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius + 50 + i * 15);
-                grad.addColorStop(0, `rgba(0, 255, 136, ${0.3 - i * 0.1})`);
-                grad.addColorStop(1, `rgba(157, 78, 221, ${0.2 - i * 0.07})`);
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius + 50 + i * 15, 0, Math.PI * 2);
-                ctx.fill();
-            }
+    function drawWheel(rot) {
+      rot = rot || 0;
+      const W = canvas.width, H = canvas.height;
+      const cx = W / 2, cy = H / 2;
+      const R  = W * 0.46;
+      ctx.clearRect(0, 0, W, H);
 
-            ctx.translate(centerX, centerY);
-            ctx.rotate((rotation * Math.PI) / 180);
-            ctx.translate(-centerX, -centerY);
+      for (var i = 2; i >= 0; i--) {
+        var g = ctx.createRadialGradient(cx, cy, R * 0.7, cx, cy, R + 20 + i * 12);
+        g.addColorStop(0, 'rgba(0,255,136,' + (0.15 - i * 0.04) + ')');
+        g.addColorStop(1, 'rgba(157,78,221,' + (0.08 - i * 0.02) + ')');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(cx, cy, R + 20 + i * 12, 0, Math.PI * 2); ctx.fill();
+      }
 
-            const segmentAngle = 360 / wheelConfig.items.length;
+      ctx.save();
+      ctx.translate(cx, cy); ctx.rotate(rot * Math.PI / 180); ctx.translate(-cx, -cy);
 
-            wheelConfig.items.forEach((item, index) => {
-                const startAngle = (index * segmentAngle - 90) * (Math.PI / 180);
-                const endAngle = ((index + 1) * segmentAngle - 90) * (Math.PI / 180);
+      var N = wheelConfig.items.length;
+      var seg = 360 / N;
 
-                const colors = ['#FFD700', '#FF6B9D', '#9D4EDD', '#3A86FF', '#06FFA5', '#00F5FF', '#FFB703', '#FF006E', '#00FF88', '#FF1493', '#32CD32', '#FF4500', '#1E90FF', '#FFD700', '#00CED1', '#FF69B4', '#808080', '#4B0082', '#FF0000'];
-                const color = colors[index % colors.length];
+      wheelConfig.items.forEach(function(item, idx) {
+        var sa  = (idx * seg - 90) * Math.PI / 180;
+        var ea  = ((idx + 1) * seg - 90) * Math.PI / 180;
+        var mid = (sa + ea) / 2;
+        var amtKey = item.amount.toFixed(2);
+        var colors = TIER_COLORS[item.amount] || TIER_COLORS[0.00];
 
-                const segGrad = ctx.createLinearGradient(
-                    centerX + radius * Math.cos((startAngle + endAngle) / 2),
-                    centerY + radius * Math.sin((startAngle + endAngle) / 2),
-                    centerX,
-                    centerY
-                );
-                segGrad.addColorStop(0, color);
-                segGrad.addColorStop(1, adjustBrightness(color, -50));
+        var grd = ctx.createLinearGradient(
+          cx + R * Math.cos(mid) * 0.9, cy + R * Math.sin(mid) * 0.9, cx, cy
+        );
+        grd.addColorStop(0,   colors[0]);
+        grd.addColorStop(0.6, colors[1]);
+        grd.addColorStop(1,   colors[2]);
 
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-                ctx.closePath();
-                ctx.fillStyle = segGrad;
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-                ctx.lineWidth = 3;
-                ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, R, sa, ea); ctx.closePath();
+        ctx.fillStyle = grd; ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 1.5; ctx.stroke();
 
-                ctx.save();
-                ctx.translate(centerX, centerY);
-                ctx.rotate((startAngle + endAngle) / 2);
-                
-                ctx.textAlign = 'right';
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 32px Arial';
-                ctx.fillText(item.emoji, radius - 70, 10);
-                
-                ctx.font = 'bold 12px Arial';
-                ctx.fillStyle = '#ffff00';
-                ctx.fillText(`$${item.amount.toFixed(2)}`, radius - 70, 35);
-                
-                ctx.restore();
-            });
+        ctx.save();
+        ctx.translate(cx, cy); ctx.rotate(mid);
 
-            const centerGrad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 50);
-            centerGrad.addColorStop(0, '#00ffff');
-            centerGrad.addColorStop(0.5, '#00ff88');
-            centerGrad.addColorStop(1, '#9D4EDD');
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
-            ctx.fillStyle = centerGrad;
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-            ctx.lineWidth = 4;
-            ctx.stroke();
+        ctx.font = 'bold ' + Math.round(W * 0.062) + 'px Arial';
+        ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(item.emoji, R * 0.82, -W * 0.025);
 
-            ctx.fillStyle = '#000';
-            ctx.font = 'bold 32px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('🌌', centerX, centerY);
+        var shortLabel = item.label.length > 11 ? item.label.slice(0, 10) + '…' : item.label;
+        ctx.font = 'bold ' + Math.round(W * 0.024) + 'px Arial';
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.fillText(shortLabel, R * 0.82, W * 0.02);
 
-            ctx.restore();
+        ctx.font = 'bold ' + Math.round(W * 0.022) + "px 'Courier New', monospace";
+        ctx.fillStyle = item.amount > 0 ? '#fff' : 'rgba(255,255,255,0.4)';
+        ctx.fillText('$' + item.amount.toFixed(2), R * 0.82, W * 0.048);
+
+        ctx.restore();
+      });
+
+      ctx.restore();
+
+      ctx.beginPath(); ctx.arc(cx, cy, R + 6, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(0,255,136,0.7)'; ctx.lineWidth = 3; ctx.stroke();
+
+      var hubR = W * 0.08;
+      var hubGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, hubR);
+      hubGrad.addColorStop(0,   '#00ffff');
+      hubGrad.addColorStop(0.4, '#00ff88');
+      hubGrad.addColorStop(1,   '#9D4EDD');
+      ctx.beginPath(); ctx.arc(cx, cy, hubR, 0, Math.PI * 2);
+      ctx.fillStyle = hubGrad; ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 3; ctx.stroke();
+
+      ctx.font = 'bold ' + Math.round(hubR * 1.1) + 'px Arial';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('🌌', cx, cy);
+    }
+
+    function spinWheel() {
+      if (isSpinning) return;
+      isSpinning = true;
+      spinBtn.disabled = true;
+      spinBtn.classList.add('spinning');
+
+      var randomExtra = Math.random() * 360;
+      var totalRot    = rotation + 2880 + 360 + randomExtra;
+      var duration    = 5500;
+      var startTime   = performance.now();
+      var startRot    = rotation;
+
+      function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+
+      function animate(now) {
+        var elapsed  = now - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        rotation = startRot + (totalRot - startRot) * easeOut(progress);
+        drawWheel(rotation % 360);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          isSpinning = false;
+          spinBtn.disabled = false;
+          spinBtn.classList.remove('spinning');
+
+          var normRot  = (360 - (rotation % 360) + 90) % 360;
+          var segAngle = 360 / wheelConfig.items.length;
+          var winIndex = Math.floor(normRot / segAngle) % wheelConfig.items.length;
+          var winner   = wheelConfig.items[winIndex];
+
+          todayWon  += winner.amount;
+          spinCount += 1;
+          if (winner.amount > bestSpin) bestSpin = winner.amount;
+
+          updateStats();
+          showResult(winner);
+          if (winner.amount > 0) launchConfetti(winner.amount);
         }
+      }
+      requestAnimationFrame(animate);
+    }
 
-        function adjustBrightness(color, percent) {
-            const num = parseInt(color.replace('#', ''), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = Math.min(255, Math.max(0, (num >> 16) + amt));
-            const G = Math.min(255, Math.max(0, ((num >> 8) & 0xFF) + amt));
-            const B = Math.min(255, Math.max(0, (num & 0xFF) + amt));
-            return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
-        }
+    function updateStats() {
+      document.getElementById('statTodayWon').textContent = '$' + todayWon.toFixed(2);
+      document.getElementById('statSpins').textContent    = spinCount;
+      document.getElementById('statBest').textContent     = '$' + bestSpin.toFixed(2);
+    }
 
-        function spinWheel() {
-            if (isSpinning) return;
-            isSpinning = true;
-            spinBtn.disabled = true;
+    function showResult(item) {
+      var personality = wheelConfig.personalities[Math.floor(Math.random() * wheelConfig.personalities.length)];
+      var tier = getTierInfo(item.amount);
 
-            const randomExtra = Math.floor(Math.random() * 360);
-            const totalRotation = 2520 + randomExtra + rotation;
-            const duration = 6000;
-            const startTime = Date.now();
-            const startRotation = rotation;
+      var badge = document.getElementById('tierBadge');
+      badge.textContent = tier.label;
+      badge.className   = 'tier-badge ' + tier.cls;
 
-            function animate() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeProgress = 1 - Math.pow(1 - progress, 3);
+      document.getElementById('resultEmoji').textContent   = item.emoji;
+      var img = document.getElementById('worldImage');
+      img.style.display = 'block';
+      img.src = item.image;
+      img.onerror = function() { this.style.display = 'none'; };
 
-                rotation = startRotation + (totalRotation - startRotation) * easeProgress;
-                drawWheel(rotation % 360);
+      document.getElementById('worldName').textContent     = item.world;
+      document.getElementById('winningItem').textContent   = item.label;
+      document.getElementById('prizeAmount').textContent   = '$' + item.amount.toFixed(2);
+      document.getElementById('personalityMsg').textContent = personality;
+      document.getElementById('cardTodayWon').textContent  = '$' + todayWon.toFixed(2);
+      document.getElementById('cardSpins').textContent     = spinCount;
+      document.getElementById('cardBest').textContent      = '$' + bestSpin.toFixed(2);
 
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    isSpinning = false;
-                    spinBtn.disabled = false;
+      overlay.classList.add('show');
+    }
 
-                    const normalizedRotation = (360 - (rotation % 360)) % 360;
-                    const segmentAngle = 360 / wheelConfig.items.length;
-                    const winIndex = Math.floor(normalizedRotation / segmentAngle);
-                    const winner = wheelConfig.items[winIndex];
+    function closeResult() {
+      overlay.classList.remove('show');
+    }
 
-                    balance += winner.amount;
-                    todayWon += winner.amount;
+    function launchConfetti(amount) {
+      var container = document.getElementById('confettiContainer');
+      var count  = amount >= 1 ? 80 : amount >= 0.50 ? 50 : 30;
+      var colors = ['#FFD700','#00FF88','#00FFFF','#FF006E','#9D4EDD','#FF6B9D','#3A86FF'];
+      for (var i = 0; i < count; i++) {
+        var p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.cssText = [
+          'left:' + (Math.random() * 100) + 'vw',
+          'background:' + colors[Math.floor(Math.random() * colors.length)],
+          'width:' + (6 + Math.random() * 8) + 'px',
+          'height:' + (8 + Math.random() * 10) + 'px',
+          'animation-duration:' + (1.5 + Math.random() * 2) + 's',
+          'animation-delay:' + (Math.random() * 0.5) + 's',
+          'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px')
+        ].join(';');
+        container.appendChild(p);
+        p.addEventListener('animationend', function() { this.remove(); });
+      }
+    }
 
-                    showResult(winner);
-                }
-            }
+    spinBtn.addEventListener('click', spinWheel);
+    document.getElementById('spinAgainBtn').addEventListener('click', function() {
+      closeResult();
+      setTimeout(spinWheel, 300);
+    });
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeResult();
+    });
 
-            animate();
-        }
-
-        function showResult(item) {
-            const personality = wheelConfig.personalities[Math.floor(Math.random() * wheelConfig.personalities.length)];
-            
-            document.getElementById('resultEmoji').textContent = item.emoji;
-            document.getElementById('worldImage').src = item.image;
-            document.getElementById('worldImage').onerror = function() { this.style.display = 'none'; };
-            document.getElementById('worldName').textContent = item.world;
-            document.getElementById('winningItem').textContent = item.label;
-            document.getElementById('prizeAmount').textContent = `$${item.amount.toFixed(2)}`;
-            document.getElementById('todayWon').textContent = `${todayWon.toFixed(2)}`;
-            document.getElementById('personalityMsg').textContent = personality;
-
-            resultPanel.classList.add('show');
-        }
-
-        function closeResult() {
-            resultPanel.classList.remove('show');
-        }
-
-        spinBtn.addEventListener('click', spinWheel);
-        drawWheel();
-    </script>
+    drawWheel();
+  </script>
 </body>
 </html>
